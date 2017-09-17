@@ -1,6 +1,7 @@
 import oscP5.*;
 import netP5.*;
 import processing.serial.*;
+import processing.sound.*;
 
 PImage triste, surpris, content, joyeux;
 
