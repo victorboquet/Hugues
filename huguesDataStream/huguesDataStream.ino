@@ -18,7 +18,7 @@ void setup(){
   if(!MPR121.begin(0x5C)){ 
     Serial.println("error setting up MPR121");  
     switch(MPR121.getError()){
-      case NO_ERROR:
+      case NO_ERROR:  
         Serial.println("no error");
         break;  
       case ADDRESS_UNKNOWN:

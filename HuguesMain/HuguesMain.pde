@@ -20,6 +20,7 @@ void setup() {
   background(0);
   oscP5 = new OscP5(this,12345);
   myRemoteLocation = new NetAddress("127.0.0.1",6448);
+  oscP5 = new OscP5(this,1200);
   
   printArray(Serial.list());
   port=new Serial(this, portName, 9600);
@@ -86,4 +87,30 @@ void draw() {
   
     }
   }
+}
+
+
+//Expression en fonction des calins. 
+
+void oscEvent(OscMessage theOscMessage) {
+   if (theOscMessage.checkAddrPattern("/wek/outputs") == true) {
+    if(theOscMessage.checkTypetag("f")) {
+      float f = theOscMessage.get(0).floatValue();
+      println("received1");
+       println((int)f);
+    }
+  }
+}
+
+void froid(){
+}
+
+void cestmieu(){
+}
+
+void plusfroid(){
+
+}
+
+void cestlepied(){
 }
