@@ -204,8 +204,11 @@ void froid() {
   image(froid, 10, height / 2 - froid.height / 2);
   
   random(1,3);
-  // Play random sound like this algorythm : 
+  // Play random sound like this algorythm :
+  //Ajouter un boolean pour voir si le son est en lecture ou pas. 
+  //https://forum.processing.org/two/discussion/8949/how-do-i-play-a-random-audio-sample
   SoundFroidSelector = int(random(1,3));
+  print(SoundFroidSelector);
   if(SoundFroidSelector == 1)froid1.play();
   if(SoundFroidSelector == 2)froid2.play();
   if(SoundFroidSelector == 3)froid3.play();
