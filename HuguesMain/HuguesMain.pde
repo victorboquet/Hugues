@@ -14,12 +14,27 @@ Serial port;
 int capteur;
 float sensors[];
 float selector = 0;
+int SoundFroidSelector;
+
+SoundFile froid1;
+SoundFile froid2;
+SoundFile froid3;
+SoundFile cestmieu1;
+SoundFile cestmieu2;
+SoundFile cestmieu3;
+SoundFile plusfroid1;
+SoundFile plusfroid2;
+SoundFile plusfroid3;
+SoundFile cestlepied1;
+SoundFile cestlepied2;
+SoundFile cestlepied3;
+
 
 OscP5 oscP5;
 NetAddress myRemoteLocation;
 
 void setup() {
-  
+
   // Gifs
   froid = new Gif(this, "froid.gif");
   froid.loop();
@@ -30,15 +45,34 @@ void setup() {
   cestlepied = new Gif(this, "cestlepied.gif");
   cestlepied.loop();
   //capteur = 0 ;
-  
+
   //Program size
   size(512, 512);
   background(0);
-  
+
   //Osc Send & Receive adress
   oscP5 = new OscP5(this, 12345);
   myRemoteLocation = new NetAddress("127.0.0.1", 6448);
   oscP5 = new OscP5(this, 1200);
+
+  //SoundFile for Hugues's Voice
+  
+  //froid
+  froid1 = new SoundFile(this, "froid1.wav");
+  froid2 = new SoundFile(this, "froid2.wav");
+  froid3 = new SoundFile(this, "froid3.wav");
+  //cestmieu
+  cestmieu1 = new SoundFile(this, "cestmieu1.wav");
+  cestmieu2 = new SoundFile(this, "cestmieu2.wav");
+  cestmieu3 = new SoundFile(this, "cestmieu3.wav");
+  //plusfroid
+  plusfroid1 = new SoundFile(this, "plusfroid1.wav");
+  plusfroid2 = new SoundFile(this, "plusfroid2.wav");
+  plusfroid3 = new SoundFile(this, "plusfroid3.wav");
+  //cestlepied
+  cestlepied1 = new SoundFile(this, "cestlepied1.wav");
+  cestlepied2 = new SoundFile(this, "cestlepied2.wav");
+  cestlepied3 = new SoundFile(this, "cestlepied3.wav");
 
   printArray(Serial.list());
   port=new Serial(this, portName, 9600);
@@ -113,6 +147,8 @@ void draw() {
       } else if (selector == 4) {
         emotion = "cestlepied"; //synth();
       }
+
+
       if (keyPressed) {
         if (key == 'a' || key == 'A') {
           emotion = "froid"; //drums();
@@ -150,7 +186,7 @@ void draw() {
 }
 
 
-// Osc receive : Wekinator Hug classifier. 
+// Osc receive : Wekinator HUG classifier. 
 
 void oscEvent(OscMessage theOscMessage) {
   if (theOscMessage.checkAddrPattern("/wek/outputs") == true) {
@@ -166,16 +202,32 @@ void oscEvent(OscMessage theOscMessage) {
 
 void froid() {
   image(froid, 10, height / 2 - froid.height / 2);
+  
+  random(1,3);
+  // Play random sound like this algorythm : 
+  SoundFroidSelector = int(random(1,3));
+  if(SoundFroidSelector == 1)froid1.play();
+  if(SoundFroidSelector == 2)froid2.play();
+  if(SoundFroidSelector == 3)froid3.play();
 }
 
 void cestmieu() {
   image(cestmieu, 10, height / 2 - froid.height / 2);
+  cestmieu1.play();
+  cestmieu2.play();
+  cestmieu3.play();
 }
 
 void plusfroid() {
   image(plusfroid, 10, height / 2 - froid.height / 2);
+  plusfroid1.play();
+  plusfroid2.play();
+  plusfroid3.play();
 }
 
 void cestlepied() {
   image(cestlepied, 10, height / 2 - froid.height / 2);
+  cestlepied1.play();
+  cestlepied2.play();
+  cestlepied3.play();
 }
