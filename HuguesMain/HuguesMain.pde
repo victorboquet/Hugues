@@ -1,8 +1,16 @@
+
+
+// Ce soir, déclancher les images et le son par appui sur touche du clavier. 
+
+int select;
+int soundSelect;
 import gifAnimation.*;
 import oscP5.*;
 import netP5.*;
 import processing.serial.*;
 import processing.sound.*;
+boolean playerInit = false;
+int soundDelay = 300; 
 
 Gif froid;
 Gif cestmieu;
@@ -14,7 +22,6 @@ Serial port;
 int capteur;
 float sensors[];
 float selector = 0;
-int SoundFroidSelector;
 
 SoundFile froid1;
 SoundFile froid2;
@@ -34,7 +41,8 @@ OscP5 oscP5;
 NetAddress myRemoteLocation;
 
 void setup() {
-
+  //frameRate = 80;
+  int select = 0;
   // Gifs
   froid = new Gif(this, "froid.gif");
   froid.loop();
@@ -53,11 +61,12 @@ void setup() {
   //Osc Send & Receive adress
   oscP5 = new OscP5(this, 12345);
   myRemoteLocation = new NetAddress("127.0.0.1", 6448);
-  oscP5 = new OscP5(this, 1200);
+  oscP5 = new OscP5(this, 12000);
 
   //SoundFile for Hugues's Voice
-  
+
   //froid
+  //minim = new Minim(this);
   froid1 = new SoundFile(this, "froid1.wav");
   froid2 = new SoundFile(this, "froid2.wav");
   froid3 = new SoundFile(this, "froid3.wav");
@@ -75,15 +84,12 @@ void setup() {
   cestlepied3 = new SoundFile(this, "cestlepied3.wav");
 
   printArray(Serial.list());
-  port=new Serial(this, portName, 9600);
+  port=new Serial(this, portName, 19200);
   port.clear();
 }
 
 void draw() {
 
-
-  //background(0);
-  //capteur = 0;
   //Search bearConductive Card
   while (port.available() > 10) {
     String myString = port.readStringUntil('\n');
@@ -122,6 +128,7 @@ void draw() {
       //print(sensors[11]);
 
       //Send Osc Messages to Wekinator
+      //Prévoir que 8 zones à détecter. 
       OscMessage myMessage = new OscMessage("/wek/inputs");
       myMessage.add(sensors[0]); //1
       myMessage.add(sensors[1]); //2
@@ -131,60 +138,11 @@ void draw() {
       myMessage.add(sensors[5]); //6
       myMessage.add(sensors[6]); //7
       myMessage.add(sensors[7]); //8
-      myMessage.add(sensors[8]); //9
-      myMessage.add(sensors[9]); //10
-      myMessage.add(sensors[10]); //11
-      myMessage.add(sensors[11]); //12
-      //myMessage.add((float)capteur);
+
       oscP5.send(myMessage, myRemoteLocation);
-
-      if (selector == 1) {
-        emotion = "froid"; //drums();
-      } else if (selector == 2) {
-        emotion = "cestmieu"; //bass();
-      } else if (selector == 3) {
-        emotion = "plufrois"; //guitar();
-      } else if (selector == 4) {
-        emotion = "cestlepied"; //synth();
-      }
-
-
-      if (keyPressed) {
-        if (key == 'a' || key == 'A') {
-          emotion = "froid"; //drums();
-          //boucheCounter = 0;
-          //drumsSound.play();
-          //drumsSound.amp(0.05);
-          //drumsSound.rate(0.5);
-        }
-        if (key == 'z' || key == 'Z') {
-          emotion = "cestmieu"; //bass();
-          //boucheCounter = 0;
-          //bassSound.play();
-          //bassSound.rate(0.5);
-          //bassSound.amp(0.05);
-        }
-        if (key == 'e' || key == 'E') {
-          emotion = "plusfroid"; //guitar();
-          //boucheCounter = 0;
-        }
-
-        if (key == 'r' || key == 'R') {
-          emotion = "cestlepied"; //synth();
-          //boucheCounter = 0;
-          //synthSound.play();
-          //synthSound.rate(0.5);
-          //synthSound.amp(0.05);
-        }
-        if (emotion == "froid") froid();
-        else if (emotion == "cestmieu") cestmieu();
-        else if (emotion == "plusfroid") plusfroid();
-        else if (emotion == "cestlepied") cestlepied();
-      }
     }
-  }// !!!! faire attention aux parenthèse !!!
+  }
 }
-
 
 // Osc receive : Wekinator HUG classifier. 
 
@@ -194,43 +152,154 @@ void oscEvent(OscMessage theOscMessage) {
       float f = theOscMessage.get(0).floatValue();
       println("received1");
       println((int)f);
-    }
-  }
-}
 
-// Faces and Sounds for each emotion. 
+      //froid -----------------------------------------------------
 
-void froid() {
-  image(froid, 10, height / 2 - froid.height / 2);
-  
-  random(1,3);
-  // Play random sound like this algorythm :
-  //Ajouter un boolean pour voir si le son est en lecture ou pas. 
-  //https://forum.processing.org/two/discussion/8949/how-do-i-play-a-random-audio-sample
-  SoundFroidSelector = int(random(1,3));
-  print(SoundFroidSelector);
-  if(SoundFroidSelector == 1)froid1.play();
-  if(SoundFroidSelector == 2)froid2.play();
-  if(SoundFroidSelector == 3)froid3.play();
-}
+      soundSelect = int(random(1, 4));
 
-void cestmieu() {
-  image(cestmieu, 10, height / 2 - froid.height / 2);
-  cestmieu1.play();
-  cestmieu2.play();
-  cestmieu3.play();
-}
 
-void plusfroid() {
-  image(plusfroid, 10, height / 2 - froid.height / 2);
-  plusfroid1.play();
-  plusfroid2.play();
-  plusfroid3.play();
-}
+      println(soundSelect);
+      if ((int)f == 1 && soundSelect == 1) {
+        image(froid, 10, height / 2 - froid.height / 2);//drums();
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          froid1.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      } else if ((int)f == 1 && soundSelect == 2) {
+        image(froid, 10, height / 2 - froid.height / 2);//drums();
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          froid2.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      } else if ((int)f == 1 && soundSelect == 3) {
+        image(froid, 10, height / 2 - froid.height / 2);//drums();
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          froid3.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      }
 
-void cestlepied() {
-  image(cestlepied, 10, height / 2 - froid.height / 2);
-  cestlepied1.play();
-  cestlepied2.play();
-  cestlepied3.play();
-}
+
+
+      //cestmieu -----------------------------------------------------
+      if ((int)f == 2 && soundSelect == 1) {
+        image(cestmieu, 10, height / 2 - froid.height / 2);
+        select ++ ;
+        println(select);
+        if (select == soundDelay) {
+          cestmieu1.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      } else if ((int)f == 2 && soundSelect == 2 ) {
+        image(cestmieu, 10, height / 2 - froid.height / 2);
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          cestmieu2.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      } else if ((int)f == 2 && soundSelect == 3 ) {
+        image(cestmieu, 10, height / 2 - froid.height / 2);
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          cestmieu3.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      }
+      //plusfroid -----------------------------------------------------
+      if ((int)f == 3 && soundSelect == 1) {
+        image(plusfroid, 10, height / 2 - froid.height / 2);
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          plusfroid1.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      } else if ((int)f == 3 && soundSelect == 2) {
+        image(plusfroid, 10, height / 2 - froid.height / 2);
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          plusfroid2.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      } else if ((int)f == 3 && soundSelect == 3) {
+        image(plusfroid, 10, height / 2 - froid.height / 2);
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          plusfroid3.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      }
+
+      //cestlepied -----------------------------------------------------
+      if ((int)f == 4 && soundSelect == 1) {
+        image(cestlepied, 10, height / 2 - froid.height / 2);
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          cestlepied1.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      }  else if ((int)f == 4 && soundSelect == 2) {
+        image(cestlepied, 10, height / 2 - froid.height / 2);
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          cestlepied2.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      }else if ((int)f == 4 && soundSelect == 3) {
+        image(cestlepied, 10, height / 2 - froid.height / 2);
+        select ++ ;
+        println(select);
+        if (select == int(random(soundDelay))) {
+          cestlepied3.play();
+        }
+        if (select > 500) {
+          select = 0 ;
+        }
+      }
+      //wouhou
+      //if ((int)f == 5) {
+      //  image(cestlepied1, 10, height / 2 - froid.height / 2);
+      //  select ++ ;
+      //  println(select);
+      //  if (select == 200) {
+      //    cestlepied1.play();
+      //  }
+      //  if (select > 500) {
+      //    select = 0 ;
+      //  }
+      //}
+    }}}

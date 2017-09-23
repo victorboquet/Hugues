@@ -1,4 +1,4 @@
-#define baudRate 9600
+#define baudRate 19200
 
 #include <MPR121.h>
 #include <Wire.h>
