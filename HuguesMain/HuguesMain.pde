@@ -104,8 +104,8 @@ void draw() {
       for (int sensorNum = 0; sensorNum < sensors.length; sensorNum++) {
         //println("Sensor " + sensorNum + ": " + sensors[sensorNum] + "\t");
       }
-      //println();
-      //print(sensors[1]);
+      println("Sensor1");
+      print(sensors[1]);
       //print(",");
       //print(sensors[2]);
       //print(",");
@@ -150,19 +150,19 @@ void oscEvent(OscMessage theOscMessage) {
   if (theOscMessage.checkAddrPattern("/wek/outputs") == true) {
     if (theOscMessage.checkTypetag("f")) {
       float f = theOscMessage.get(0).floatValue();
-      println("received1");
-      println((int)f);
+      //println("received1");
+      //println((int)f);
 
       //froid -----------------------------------------------------
 
       soundSelect = int(random(1, 4));
 
 
-      println(soundSelect);
+      //println(soundSelect);
       if ((int)f == 1 && soundSelect == 1) {
         image(froid, 10, height / 2 - froid.height / 2);//drums();
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           froid1.play();
         }
@@ -172,7 +172,7 @@ void oscEvent(OscMessage theOscMessage) {
       } else if ((int)f == 1 && soundSelect == 2) {
         image(froid, 10, height / 2 - froid.height / 2);//drums();
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           froid2.play();
         }
@@ -182,7 +182,7 @@ void oscEvent(OscMessage theOscMessage) {
       } else if ((int)f == 1 && soundSelect == 3) {
         image(froid, 10, height / 2 - froid.height / 2);//drums();
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           froid3.play();
         }
@@ -197,7 +197,7 @@ void oscEvent(OscMessage theOscMessage) {
       if ((int)f == 2 && soundSelect == 1) {
         image(cestmieu, 10, height / 2 - froid.height / 2);
         select ++ ;
-        println(select);
+        //println(select);
         if (select == soundDelay) {
           cestmieu1.play();
         }
@@ -207,7 +207,7 @@ void oscEvent(OscMessage theOscMessage) {
       } else if ((int)f == 2 && soundSelect == 2 ) {
         image(cestmieu, 10, height / 2 - froid.height / 2);
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           cestmieu2.play();
         }
@@ -217,7 +217,7 @@ void oscEvent(OscMessage theOscMessage) {
       } else if ((int)f == 2 && soundSelect == 3 ) {
         image(cestmieu, 10, height / 2 - froid.height / 2);
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           cestmieu3.play();
         }
@@ -229,7 +229,7 @@ void oscEvent(OscMessage theOscMessage) {
       if ((int)f == 3 && soundSelect == 1) {
         image(plusfroid, 10, height / 2 - froid.height / 2);
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           plusfroid1.play();
         }
@@ -239,7 +239,7 @@ void oscEvent(OscMessage theOscMessage) {
       } else if ((int)f == 3 && soundSelect == 2) {
         image(plusfroid, 10, height / 2 - froid.height / 2);
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           plusfroid2.play();
         }
@@ -249,7 +249,7 @@ void oscEvent(OscMessage theOscMessage) {
       } else if ((int)f == 3 && soundSelect == 3) {
         image(plusfroid, 10, height / 2 - froid.height / 2);
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           plusfroid3.play();
         }
@@ -262,27 +262,27 @@ void oscEvent(OscMessage theOscMessage) {
       if ((int)f == 4 && soundSelect == 1) {
         image(cestlepied, 10, height / 2 - froid.height / 2);
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           cestlepied1.play();
         }
         if (select > 500) {
           select = 0 ;
         }
-      }  else if ((int)f == 4 && soundSelect == 2) {
+      } else if ((int)f == 4 && soundSelect == 2) {
         image(cestlepied, 10, height / 2 - froid.height / 2);
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           cestlepied2.play();
         }
         if (select > 500) {
           select = 0 ;
         }
-      }else if ((int)f == 4 && soundSelect == 3) {
+      } else if ((int)f == 4 && soundSelect == 3) {
         image(cestlepied, 10, height / 2 - froid.height / 2);
         select ++ ;
-        println(select);
+        //println(select);
         if (select == int(random(soundDelay))) {
           cestlepied3.play();
         }
@@ -302,4 +302,6 @@ void oscEvent(OscMessage theOscMessage) {
       //    select = 0 ;
       //  }
       //}
-    }}}
+    }
+  }
+}
